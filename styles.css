@@ -315,14 +315,19 @@ select.input {
 /* Date input with calendar trigger */
 .input-wrap-date {
   position: relative;
-  display: block;
+  display: flex;
+  align-items: stretch;
   min-width: 0;
+  min-height: var(--touch);
 }
 
 .input-wrap-date .input-date {
+  flex: 1 1 auto;
+  min-width: 0;
   padding-right: var(--touch);
   color: transparent;
   caret-color: transparent;
+  border-radius: var(--radius) 0 0 var(--radius);
 }
 
 .input-wrap-date .date-input-display {
@@ -348,8 +353,10 @@ select.input {
   position: absolute;
   right: 0;
   top: 0;
+  bottom: 0;
   width: var(--touch);
-  height: var(--touch);
+  min-width: var(--touch);
+  flex-shrink: 0;
   padding: 0;
   border: none;
   background: transparent;
@@ -1013,7 +1020,10 @@ select.input {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-6);
+  padding: var(--space-4);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  box-sizing: border-box;
 }
 
 .modal[hidden] {
@@ -1039,6 +1049,8 @@ select.input {
   overflow-x: hidden;
   overflow-y: auto;
   min-width: 0;
+  margin: auto;
+  flex-shrink: 0;
 }
 
 .modal-panel-xl {
@@ -1048,6 +1060,8 @@ select.input {
   display: flex;
   flex-direction: column;
   box-shadow: var(--shadow-xl);
+  margin: auto;
+  flex-shrink: 0;
 }
 
 .modal-panel-xl .modal-body {
@@ -1058,7 +1072,7 @@ select.input {
 }
 
 .modal-body-xl {
-  padding: var(--space-8);
+  padding: var(--space-6);
 }
 
 .modal-panel-sm {
@@ -1069,8 +1083,11 @@ select.input {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--space-6);
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-6);
   border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  min-width: 0;
 }
 
 .modal-title {
@@ -1078,6 +1095,10 @@ select.input {
   font-size: var(--text-xl);
   font-weight: 600;
   color: var(--text);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .modal-close {
@@ -1095,6 +1116,7 @@ select.input {
   position: relative;
   overflow-x: hidden;
   min-width: 0;
+  overflow-y: auto;
 }
 
 .modal-body .booking-form .form-grid,
@@ -1357,10 +1379,11 @@ select.input {
   color: var(--text-muted);
 }
 
-/* Responsive */
+/* Responsive — mobile-first spacing */
 @media (max-width: 560px) {
   .form-grid {
     grid-template-columns: 1fr;
+    gap: var(--space-4);
   }
 
   .vendor-cards {
@@ -1373,6 +1396,187 @@ select.input {
 
   .stay-bar-wrap {
     flex: 1 1 100%;
+  }
+
+  /* Modals: tighter padding, no cut-off */
+  .modal {
+    padding: var(--space-3);
+    align-items: flex-start;
+    padding-top: max(var(--space-3), env(safe-area-inset-top));
+    padding-bottom: max(var(--space-3), env(safe-area-inset-bottom));
+    padding-left: max(var(--space-3), env(safe-area-inset-left));
+    padding-right: max(var(--space-3), env(safe-area-inset-right));
+  }
+
+  .modal-panel,
+  .modal-panel-xl {
+    max-width: 100%;
+    max-height: 85vh;
+    margin: auto 0;
+  }
+
+  .modal-header {
+    padding: var(--space-4) var(--space-4);
+  }
+
+  .modal-body {
+    padding: var(--space-4);
+  }
+
+  .modal-body-xl {
+    padding: var(--space-4);
+  }
+
+  .modal-title {
+    font-size: var(--text-lg);
+    white-space: normal;
+  }
+
+  .modal-close {
+    flex-shrink: 0;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Form fields: consistent spacing, no cut-off */
+  .modal-body .field,
+  .modal-body .booking-form .form-grid,
+  .modal-body .booking-form .field,
+  .modal-body .booking-form .checkbox-field {
+    margin-bottom: var(--space-4);
+  }
+
+  .modal-body .field:last-of-type,
+  .modal-body .booking-form .field:last-of-type {
+    margin-bottom: var(--space-5);
+  }
+
+  .input,
+  input.input,
+  select.input,
+  textarea.input {
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .input-wrap-date {
+    min-height: 48px;
+  }
+
+  .input-wrap-date .input-date {
+    padding-right: 44px;
+  }
+
+  .date-picker-trigger {
+    width: 44px;
+    min-width: 44px;
+  }
+
+  .input-wrap-date .date-input-display {
+    right: 44px;
+  }
+
+  /* Date picker popup inside modal */
+  .date-picker-popup {
+    padding: var(--space-4);
+    max-width: 100%;
+  }
+
+  .date-picker-popup .dp-grid {
+    gap: 2px;
+  }
+
+  .date-picker-popup .dp-day {
+    min-height: 36px;
+    font-size: 0.8125rem;
+  }
+
+  /* Meeting form: stack top row, reduce agenda height slightly on small screens */
+  .meeting-form-xl .meeting-form-top {
+    flex-direction: column;
+    gap: var(--space-4);
+    margin-bottom: var(--space-4);
+  }
+
+  .meeting-form-xl .field-agenda {
+    margin-bottom: var(--space-4);
+  }
+
+  .input-textarea-xl {
+    min-height: 200px;
+    padding: var(--space-4);
+  }
+
+  .file-upload-zone {
+    min-height: 100px;
+    padding: var(--space-4);
+  }
+
+  .file-upload-zone-inline {
+    min-height: 64px;
+    padding: var(--space-3);
+  }
+
+  .file-upload-label,
+  .file-upload-hint {
+    font-size: 0.8125rem;
+  }
+
+  /* Buttons: allow shrink, consistent spacing */
+  .btn-primary,
+  .btn-meeting {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .date-detail-actions {
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .date-detail-actions .btn {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .calendar-block {
+    padding: var(--space-4);
+  }
+
+  .calendar-header {
+    gap: var(--space-4);
+    margin-bottom: var(--space-4);
+  }
+
+  .calendar-month-title {
+    min-width: 0;
+    font-size: var(--text-lg);
+  }
+
+  .calendar-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .calendar-actions .btn {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  main {
+    padding: var(--space-6) var(--space-4);
+  }
+
+  .card,
+  .card-form {
+    padding: var(--space-5);
+  }
+
+  .section-header {
+    margin-bottom: var(--space-6);
   }
 }
 
