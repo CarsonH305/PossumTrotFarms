@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Possum Trot Farms | Greenbrier, Tennessee</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="site-banner" role="note">
+    <p>Family use only. This site will be password-protected—please do not share the link.</p>
+  </div>
+
+  <header class="hero">
+    <div class="hero-media">
+      <div class="hero-placeholder" aria-hidden="true"></div>
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">Possum Trot Farms</h1>
+      <p class="hero-subtitle">Greenbrier, Tennessee</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="section section-bookings" id="bookings">
+      <div class="section-header">
+        <h2 class="section-title">When you're at the farm</h2>
+        <p class="section-desc">See who's visiting and add your own stay so everyone stays in the loop.</p>
+      </div>
+      <div id="bookings-messages" class="messages" aria-live="polite"></div>
+
+      <div class="calendar-block">
+        <div class="calendar-header">
+          <div class="calendar-nav">
+            <button type="button" class="btn btn-ghost btn-icon" id="calendar-prev" aria-label="Previous month">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <h3 class="calendar-month-title" id="calendar-month-title"></h3>
+            <button type="button" class="btn btn-ghost btn-icon" id="calendar-next" aria-label="Next month">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+          </div>
+          <div class="calendar-actions">
+            <button type="button" class="btn btn-primary" id="open-add-stay-btn">Add stay</button>
+            <button type="button" class="btn btn-meeting" id="open-add-meeting-btn">Add Meeting</button>
+          </div>
+        </div>
+        <div class="calendar-wrap" id="calendar-wrap"></div>
+        <div id="calendar-day-tooltip" class="calendar-day-tooltip" role="tooltip" aria-hidden="true"></div>
+        <div class="calendar-stays" id="calendar-stays"></div>
+        <div class="calendar-meetings" id="calendar-meetings"></div>
+      </div>
+    </section>
+
+    <div class="media-block media-block-photo">
+      <img src="images/family-farm.png" alt="Family and friends at Possum Trot Farms with tractor and ATVs" class="media-photo">
+    </div>
+
+    <section class="section section-vendors" id="vendors">
+      <div class="section-header">
+        <h2 class="section-title">Vendors &amp; service providers</h2>
+        <p class="section-desc">Trusted contacts for plumbing, electrical, and more. Click a tile for details.</p>
+      </div>
+      <div id="vendors-messages" class="messages" aria-live="polite"></div>
+      <div class="vendors-list" id="vendors-list"></div>
+
+      <div class="card card-form">
+        <h3 class="card-title">Add a provider</h3>
+        <form class="vendor-form" id="vendor-form">
+          <div class="field">
+            <label class="label" for="vendor-category">Category</label>
+            <select id="vendor-category" name="category" class="input">
+              <option value="plumbing">Plumbing</option>
+              <option value="electrical">Electrical</option>
+              <option value="gas">Gas</option>
+              <option value="roof">Roof</option>
+              <option value="other">Other (specify below)</option>
+            </select>
+            <div class="field vendor-category-other-wrap" id="vendor-category-other-wrap" style="display: none;">
+              <label class="label" for="vendor-category-other">Category name</label>
+              <input type="text" id="vendor-category-other" class="input" placeholder="e.g. HVAC, Landscaping">
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="field">
+              <label class="label" for="vendor-name">Company name</label>
+              <input type="text" id="vendor-name" name="name" required placeholder="Business name" class="input">
+            </div>
+            <div class="field">
+              <label class="label" for="vendor-contact-name">Contact name</label>
+              <input type="text" id="vendor-contact-name" name="contact_name" placeholder="Person to ask for" class="input">
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="field">
+              <label class="label" for="vendor-phone">Phone</label>
+              <input type="tel" id="vendor-phone" name="phone" placeholder="(555) 123-4567" class="input">
+            </div>
+            <div class="field">
+              <label class="label" for="vendor-email">Email <span class="label-optional">optional</span></label>
+              <input type="email" id="vendor-email" name="email" placeholder="email@example.com" class="input">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Add vendor</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- Add stay modal -->
+  <div class="modal" id="add-stay-modal" role="dialog" aria-labelledby="add-stay-modal-title" aria-modal="true" hidden>
+    <div class="modal-backdrop" id="add-stay-backdrop"></div>
+    <div class="modal-panel modal-panel-xl">
+      <div class="modal-header">
+        <h3 class="modal-title" id="add-stay-modal-title">Add a stay</h3>
+        <button type="button" class="btn btn-ghost btn-icon modal-close" id="close-add-stay" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form class="booking-form" id="booking-form">
+          <div class="form-grid">
+            <div class="field date-field-wrap">
+              <label class="label" for="booking-start">Start date</label>
+              <div class="input-wrap-date">
+                <input type="date" id="booking-start" name="start" required class="input input-date" autocomplete="off">
+                <span class="date-input-display" id="booking-start-display" aria-hidden="true">mm/dd/yy</span>
+                <button type="button" class="date-picker-trigger" id="date-picker-trigger-start" aria-label="Open calendar"></button>
+              </div>
+            </div>
+            <div class="field date-field-wrap">
+              <label class="label" for="booking-end">End date</label>
+              <div class="input-wrap-date">
+                <input type="date" id="booking-end" name="end" required class="input input-date" autocomplete="off">
+                <span class="date-input-display" id="booking-end-display" aria-hidden="true">mm/dd/yy</span>
+                <button type="button" class="date-picker-trigger" id="date-picker-trigger-end" aria-label="Open calendar"></button>
+              </div>
+            </div>
+          </div>
+          <div class="date-picker-popup" id="date-picker-popup" aria-hidden="true"></div>
+          <div class="field">
+            <label class="label" for="booking-who">Who's visiting <span class="label-optional">optional</span></label>
+            <input type="text" id="booking-who" name="who" placeholder="e.g. Smith family" class="input">
+          </div>
+          <label class="field checkbox-field checkbox-field-small">
+            <input type="checkbox" id="booking-yearly" name="yearly" class="checkbox">
+            <span class="checkbox-label">Repeat every year</span>
+          </label>
+          <button type="submit" class="btn btn-primary">Add stay</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add meeting modal -->
+  <div class="modal" id="add-meeting-modal" role="dialog" aria-labelledby="add-meeting-modal-title" aria-modal="true" hidden>
+    <div class="modal-backdrop" id="add-meeting-backdrop"></div>
+    <div class="modal-panel modal-panel-xl">
+      <div class="modal-header">
+        <h3 class="modal-title" id="add-meeting-modal-title">Add Meeting</h3>
+        <button type="button" class="btn btn-ghost btn-icon modal-close" id="close-add-meeting" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body modal-body-xl">
+        <form class="meeting-form meeting-form-xl" id="meeting-form">
+          <div class="meeting-form-top">
+            <div class="field">
+              <label class="label" for="meeting-date">Date</label>
+              <input type="date" id="meeting-date" name="date" required class="input">
+            </div>
+            <div class="field field-flex-1">
+              <label class="label" for="meeting-title">Title <span class="label-optional">optional</span></label>
+              <input type="text" id="meeting-title" name="title" class="input" placeholder="e.g. Family planning">
+            </div>
+          </div>
+          <div class="field field-agenda">
+            <label class="label" for="meeting-notes">Agenda &amp; notes</label>
+            <textarea id="meeting-notes" name="notes" class="input input-textarea-xl" placeholder="Meeting agenda, prep notes, talking points..."></textarea>
+          </div>
+          <div class="field field-uploads">
+            <label class="label">Attachments</label>
+            <div class="file-upload-zone" id="meeting-files-zone">
+              <input type="file" id="meeting-files" name="files" class="meeting-file-input" multiple accept=".pdf,.doc,.docx,.txt,.md,image/*">
+              <span class="file-upload-label">Drop files here or click to browse</span>
+              <span class="file-upload-hint">PDF, Word, images, etc. You can add more after creating the meeting.</span>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-meeting btn-lg">Add Meeting</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Meeting detail modal (view/edit meeting, notes, files) -->
+  <div class="modal" id="meeting-detail-modal" role="dialog" aria-labelledby="meeting-detail-modal-title" aria-modal="true" hidden>
+    <div class="modal-backdrop" id="meeting-detail-backdrop"></div>
+    <div class="modal-panel modal-panel-xl">
+      <div class="modal-header">
+        <h3 class="modal-title" id="meeting-detail-modal-title">Meeting</h3>
+        <button type="button" class="btn btn-ghost btn-icon modal-close" id="close-meeting-detail" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body modal-body-xl" id="meeting-detail-body"></div>
+    </div>
+  </div>
+
+  <!-- Date detail modal (who's booked on this date) -->
+  <div class="modal" id="date-detail-modal" role="dialog" aria-labelledby="date-detail-modal-title" aria-modal="true" hidden>
+    <div class="modal-backdrop" id="date-detail-backdrop"></div>
+    <div class="modal-panel modal-panel-xl">
+      <div class="modal-header">
+        <h3 class="modal-title" id="date-detail-modal-title">Date</h3>
+        <button type="button" class="btn btn-ghost btn-icon modal-close" id="close-date-detail" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body" id="date-detail-body"></div>
+    </div>
+  </div>
+
+  <!-- Vendor detail modal -->
+  <div class="modal" id="vendor-detail-modal" role="dialog" aria-labelledby="vendor-detail-modal-title" aria-modal="true" hidden>
+    <div class="modal-backdrop" id="vendor-detail-backdrop"></div>
+    <div class="modal-panel modal-panel-xl">
+      <div class="modal-header">
+        <h3 class="modal-title" id="vendor-detail-modal-title">Vendor</h3>
+        <button type="button" class="btn btn-ghost btn-icon modal-close" id="close-vendor-detail" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body" id="vendor-detail-body"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
